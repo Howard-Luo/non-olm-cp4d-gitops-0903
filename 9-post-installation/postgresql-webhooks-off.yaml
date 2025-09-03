@@ -44,13 +44,12 @@ spec:
       containers:
       - name: patcher
         image: bitnami/kubectl:latest
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -euo pipefail
-          echo "Patching Application/postgresql-cluster-gitops to disable webhooks..."
-          kubectl -n openshift-gitops patch application postgresql-cluster-gitops \
-            --type merge \
-            -p '{"spec":{"source":{"helm":{"valuesObject":{"webhook":{"mutating":{"create":false},"validating":{"create":false}}}}}}}'
-          echo "Done."
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            set -euo pipefail
+            echo "sleeping 180s..."
+            sleep 180
+            kubectl -n openshift-gitops patch application postgresql-cluster-gitops \
+              --type merge \
+              -p '{"spec":{"source":{"helm":{"valuesObject":{"webhook":{"mutating":{"create":false},"validating":{"create":false}}}}}}}'
